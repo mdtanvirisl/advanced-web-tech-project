@@ -28,8 +28,8 @@ export class User2Controller {
         return this.user2Service.findOneByUsername(username);
     }
 
-    @Delete(':username')
-    async deleteUser(@Param('username') username: string): Promise<void> {
+    @Delete('delete/:username')
+    async deleteUser(@Param('username') username: number): Promise<void> {
         return this.user2Service.remove(username);
     }
 }

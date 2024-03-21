@@ -25,7 +25,7 @@ export class User2Service {
         });
     }
 
-    async remove(username: string): Promise<void> {
+    async remove(username: number): Promise<void> {
         await this.userRepository.delete(username);
     }
 
