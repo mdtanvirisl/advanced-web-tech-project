@@ -18,9 +18,9 @@ export class WarehouseDTO {
     @Matches(/.*@.*\.com$/, { message: 'Email must contain @, ., com' })
     email: string;
 
-    // @IsNotEmpty({ message: 'Please enter a valid username' })
-    // @IsString()
-    // username: string;
+    @IsNotEmpty({ message: 'Please enter a valid username' })
+    @IsString()
+    username: string;
 
     @IsNotEmpty({ message: 'Please enter a valid password' })
     @IsString()

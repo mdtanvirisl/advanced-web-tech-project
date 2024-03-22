@@ -66,4 +66,8 @@ export class WarehouseService {
     //     manager.admin = admin;
     //     return this.managerRepo.save(manager);
     // }
+
+    async searchSeller(logindata: loginDTO): Promise<WarehouseEntity> {
+        return await this.adminRepo.findOneBy({ email: logindata.email });
+    }
 }

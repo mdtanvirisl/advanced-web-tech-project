@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UsePipes, UseInterceptors, UploadedFile, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, UsePipes, UseInterceptors, UploadedFile, ValidationPipe, Session, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
@@ -35,8 +35,24 @@ export class AuthController {
         myobj.filename = myfile.filename;
         return this.authService.signUp(myobj);
     }
+    // @Post('login')
+    // signIn(@Body() logindata: loginDTO) {
+    //     return this.authService.signIn(logindata);
+    // }
+
     @Post('login')
-    signIn(@Body() logindata: loginDTO) {
-        return this.authService.signIn(logindata);
+    @UsePipes(new ValidationPipe)
+    async login(@Body() logindata: loginDTO, @Session() session) {
+
+        const result = await this.authService.login(logindata);
+        if (result) {
+            session.email = logindata.email;
+            console.log(session.email);
+
+            return true;
+        }
+        else {
+            throw new HttpException('UnauthorizedException', HttpStatus.UNAUTHORIZED);
+        }
     }
 }
