@@ -28,7 +28,7 @@ export class AuthService {
         };
     }
     async login(logindata: loginDTO) {
-        const seller = await this.warehouseService.searchSeller(logindata);
+        const seller = await this.warehouseService.search(logindata);
         const result = await bcrypt.compare(logindata.password, seller.password);
         if (result) {
             return true;

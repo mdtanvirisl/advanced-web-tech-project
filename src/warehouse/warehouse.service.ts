@@ -67,7 +67,7 @@ export class WarehouseService {
     //     return this.managerRepo.save(manager);
     // }
 
-    async searchSeller(logindata: loginDTO): Promise<WarehouseEntity> {
+    async search(logindata: loginDTO): Promise<WarehouseEntity> {
         return await this.adminRepo.findOneBy({ email: logindata.email });
     }
 }
