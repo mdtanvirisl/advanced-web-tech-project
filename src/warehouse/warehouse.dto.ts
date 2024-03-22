@@ -14,8 +14,8 @@ export class WarehouseDTO {
 
     @Optional()
     warehouseId: string;
-    @Optional()
-    managers: any;
+    // @Optional()
+    // managers: any;
 }
 
 export class loginDTO {

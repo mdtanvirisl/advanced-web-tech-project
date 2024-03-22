@@ -2,7 +2,7 @@
 import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
-@Entity("admin")
+@Entity("warehouse")
 export class WarehouseEntity {
 
     @PrimaryGeneratedColumn()

@@ -1,6 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { WarehouseEntity } from "./warehouse.entity";
 import { loginDTO } from "./warehouse.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { JwtService } from "@nestjs/jwt";
 
 
 @Injectable()
@@ -38,4 +41,29 @@ export class WarehouseService {
         return myobj;
 
     }
+    getUsers(): object {
+        return { message: "hellow Admin" }
+    }
+    getUsersById(id: string): object {
+        return { message: "You id is " + id };
+    }
+    getUsersByNameAndId(name: string, id: string): object {
+        return {
+            message: "You id is " + name +
+                " and your id is " + id
+        };
+
+    }
+
+    async getAllAdmins(): Promise<WarehouseEntity[]> {
+        return this.adminRepo.find({ relations: ['managers'] });
+    }
+
+    // async addManager(adminId: string, manager: ManagerEntity): Promise<ManagerEntity> {
+    //     console.log(adminId);
+    //     console.log(manager);
+    //     const admin = await this.adminRepo.findOneBy({ adminId: adminId });
+    //     manager.admin = admin;
+    //     return this.managerRepo.save(manager);
+    // }
 }

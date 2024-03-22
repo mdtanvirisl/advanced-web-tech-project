@@ -3,11 +3,11 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { jwtConstants } from './constants';
-import { AdminModule } from 'src/admin/admin.module';
+import { WarehouseModule } from '../warehouse.module';
 
 @Module({
     imports: [
-        AdminModule,
+        WarehouseModule,
         JwtModule.register({
             global: true,
             secret: jwtConstants.secret,
