@@ -1,21 +1,20 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-
 import { JwtService } from '@nestjs/jwt';
-import { AdminService } from '../admin.service';
-import { AdminDTO, loginDTO } from 'src/admin/admin.dto';
 import * as bcrypt from 'bcrypt';
+import { WarehouseService } from '../warehouse.service';
+import { WarehouseDTO, loginDTO } from '../warehouse.dto';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private adminService: AdminService,
+        private warehouseService: WarehouseService,
         private jwtService: JwtService
     ) { }
-    async signUp(myobj: AdminDTO): Promise<AdminDTO> {
-        return await this.adminService.addAdmin(myobj);
+    async signUp(myobj: WarehouseDTO): Promise<WarehouseDTO> {
+        return await this.warehouseService.addAdmin(myobj);
     }
     async signIn(logindata: loginDTO): Promise<{ access_token: string }> {
-        const user = await this.adminService.findOne(logindata);
+        const user = await this.warehouseService.findOne(logindata);
         if (!user) {
             throw new UnauthorizedException();
         }

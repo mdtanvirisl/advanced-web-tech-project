@@ -1,9 +1,9 @@
 import { Body, Controller, Post, UsePipes, UseInterceptors, UploadedFile, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AdminDTO, loginDTO } from 'src/admin/admin.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
 import * as bcrypt from 'bcrypt';
+import { WarehouseDTO, loginDTO } from '../warehouse.dto';
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) { }
@@ -28,7 +28,7 @@ export class AuthController {
         }
     ))
     @UsePipes(new ValidationPipe)
-    async addUser(@Body() myobj: AdminDTO, @UploadedFile() myfile: Express.Multer.File): Promise<AdminDTO> {
+    async addUser(@Body() myobj: WarehouseDTO, @UploadedFile() myfile: Express.Multer.File): Promise<WarehouseDTO> {
         const salt = await bcrypt.genSalt();
         const hashedpassword = await bcrypt.hash(myobj.password, salt);
         myobj.password = hashedpassword;
@@ -39,6 +39,4 @@ export class AuthController {
     signIn(@Body() logindata: loginDTO) {
         return this.authService.signIn(logindata);
     }
-
-
 }

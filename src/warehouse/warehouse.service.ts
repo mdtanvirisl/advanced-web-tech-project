@@ -1,8 +1,21 @@
 import { Injectable } from "@nestjs/common";
+import { WarehouseEntity } from "./warehouse.entity";
+import { loginDTO } from "./warehouse.dto";
 
 
 @Injectable()
 export class WarehouseService {
+    constructor(@InjectRepository(WarehouseEntity)
+    private adminRepo: Repository<WarehouseEntity>,
+        private jwtService: JwtService
+
+    ) { }
+    async addAdmin(myobj: WarehouseEntity): Promise<WarehouseEntity> {
+        return await this.adminRepo.save(myobj);
+    }
+    async findOne(logindata: loginDTO): Promise<any> {
+        return await this.adminRepo.findOneBy({ email: logindata.email });
+    }
     getWhStaff(): string {
         return "Welcome to 1st route service";
     }

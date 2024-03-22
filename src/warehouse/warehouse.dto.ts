@@ -1,0 +1,24 @@
+import { Optional } from "@nestjs/common";
+import { IsEmail, IsInt, IsNotEmpty, IsString } from "class-validator";
+
+export class WarehouseDTO {
+
+    email: string;
+    password: string;
+
+    name: string;
+
+    address: string;
+
+    filename: string;
+
+    @Optional()
+    warehouseId: string;
+    @Optional()
+    managers: any;
+}
+
+export class loginDTO {
+    @IsEmail() email: string;
+    @IsNotEmpty() password: string;
+}
