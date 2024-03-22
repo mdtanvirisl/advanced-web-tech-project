@@ -11,7 +11,7 @@ import { AuthService } from "./Auth/auth.service";
     imports: [TypeOrmModule.forFeature([WarehouseEntity]),
     JwtModule.register({
         global: true,
-        secret: "3NP_Backend_Admin",
+        secret: "3NP_Backend_Warehouse",
         signOptions: { expiresIn: '30m' },
     }),
     ],

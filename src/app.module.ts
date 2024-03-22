@@ -5,6 +5,7 @@ import { AdminModule } from './admin/admin.module';
 import { WarehouseModule } from './warehouse/warehouse.module';
 import { User2Module } from './user2/user2.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './warehouse/Auth/auth.module';
 
 @Module({
   imports: [AdminModule, WarehouseModule, User2Module, TypeOrmModule.forRoot(
@@ -18,7 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true,
     }
-  )],
+  ), AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
