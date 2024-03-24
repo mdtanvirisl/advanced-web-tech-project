@@ -29,7 +29,7 @@ export class WarehouseController {
         return this.warehouseService.getUsersByNameAndId(name, id);
     }
 
-    @Post('addadmin')
+    @Post('addstaff')
     @UseInterceptors(FileInterceptor('myfile',
         {
             fileFilter: (req, file, cb) => {
@@ -63,7 +63,7 @@ export class WarehouseController {
 
     //     return this.warehouseService.addManager(adminid, myobj);
     // }
-    @Get('/getadmin')
+    @Get('/getstaff')
     getAllAdmin(): Promise<WarehouseEntity[]> {
         return this.warehouseService.getAllAdmins();
     }

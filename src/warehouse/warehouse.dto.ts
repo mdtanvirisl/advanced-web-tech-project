@@ -11,24 +11,24 @@ export class WarehouseDTO {
     @Matches(/^[A-Za-z]+$/, { message: 'Name field should contain only alphabetic character' })
     name: string;
 
-    @IsNotEmpty({ message: 'Please enter a valid email address' })
+    @IsNotEmpty({ message: 'enter a valid email address' })
     @IsEmail({}, { message: 'Invalid email format' })
-    @MaxLength(30, { message: 'Email Address field must be at most 30 characters long' })
-    @MinLength(10, { message: 'Email Address field must be at least 20 characters long' })
+    @MaxLength(30, { message: 'Email must be at most 30 characters long' })
+    @MinLength(10, { message: 'Email must be at least 20 characters long' })
     @Matches(/.*@.*\.com$/, { message: 'Email must contain @, ., com' })
     email: string;
 
-    @IsNotEmpty({ message: 'Please enter a valid username' })
+    @IsNotEmpty({ message: 'enter a valid username' })
     @IsString()
     username: string;
 
-    @IsNotEmpty({ message: 'Please enter a valid password' })
+    @IsNotEmpty({ message: 'enter a valid password' })
     @IsString()
-    @Matches(/.*[0-9].*/, { message: 'Password field must contain one of the numeric character' })
-    @Matches(/[#@\$&]/, { message: 'Password field must contain one of the special characters (@ or # or $ or &)' })
+    @Matches(/.*[0-9].*/, { message: 'Password must contain one of the numeric character' })
+    @Matches(/[#@\$&]/, { message: 'Password must contain one of the special characters (@ or # or $ or &)' })
     password: string;
 
-    @IsNotEmpty({ message: 'Please enter your address' })
+    @IsNotEmpty({ message: 'enter your address' })
     @IsString()
     address: string;
     @Optional()
