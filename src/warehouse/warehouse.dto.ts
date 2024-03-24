@@ -34,8 +34,11 @@ export class WarehouseDTO {
     @Optional()
     filename: string;
 
+    @Optional()
+    notices: any;
+
     // @Optional()
-    // managers: any;
+    // address: any;
 }
 
 export class loginDTO {

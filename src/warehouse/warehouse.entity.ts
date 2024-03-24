@@ -1,5 +1,6 @@
 // import { ManagerEntity } from "src/manager/manager.entity";
 import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { noticeEntity } from "./notice.entity";
 
 
 @Entity("warehouse")
@@ -25,7 +26,7 @@ export class WarehouseEntity {
     filename: string;
 
 
-    // @OneToMany(() => ManagerEntity, manager => manager.admin, { cascade: true })
-    // managers: ManagerEntity[];
+    @OneToMany(() => noticeEntity, notice => notice.warehouse, { cascade: true })
+    notices: noticeEntity[];
 
 }

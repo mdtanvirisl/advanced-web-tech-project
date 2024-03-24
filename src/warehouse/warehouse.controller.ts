@@ -5,6 +5,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { MulterError, diskStorage } from "multer";
 import { WarehouseDTO } from "./warehouse.dto";
 import { WarehouseEntity } from "./warehouse.entity";
+import { SessionGuard } from "./session.guard";
 
 
 @Controller('warehouse')
@@ -73,6 +74,7 @@ export class WarehouseController {
     //     return req.user;
     // }
     // ###################################
+    @UseGuards(SessionGuard)
     @Get('/dashboard')
     getWarehouse(): object {
         try {
@@ -82,7 +84,7 @@ export class WarehouseController {
             return { error: 'invalid' };
         }
     }
-    @UseGuards(AuthGuard)
+    @UseGuards(SessionGuard)
     @Get('/viewprofile')
     showProfile(@Session() session): object {
         try {

@@ -4,28 +4,29 @@ import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn, Unique } from "t
 
 
 
-@Entity("product")
-export class ProductEntity{
+@Entity("order")
+export class OrderEntity {
 
     @PrimaryGeneratedColumn()
     productId: number;
 
+
     @Column({ type: 'varchar', unique: true })
     productCode: string;
 
-    @Column({name:'fullName', type: 'varchar', length: 150, unique: true })
+    @Column({ name: 'fullName', type: 'varchar', length: 150, unique: true })
     productName: string;
+
+    @Column({ name: 'fullName', type: 'varchar', length: 150, unique: true })
+    customerName: string;
+
+    @Column({ name: 'fullName', type: 'varchar', length: 150, unique: true })
+    address: string;
 
     @Column()
     productQuantity: number;
 
-    @Column({ type: 'varchar', length: 100 })
-    productCategory: string;
-
     @Column()
     productPrice: number;
 
-    @Column({name:'Picture' })
-    filename: string;
-    
 }

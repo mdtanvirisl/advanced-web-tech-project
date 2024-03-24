@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, ParseIntPipe } from "@nestjs/common";
 import { WarehouseEntity } from "./warehouse.entity";
-import { loginDTO } from "./warehouse.dto";
+import { WarehouseDTO, loginDTO } from "./warehouse.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
@@ -33,8 +33,17 @@ export class WarehouseService {
     getNotification(): string {
         return "Welcome to 3rd route service of staff";
     }
-    async remove(username: number): Promise<void> {
-        await this.warehouseRepo.delete(username);
+
+    async updateOrder(id: number, warehouseDTO: WarehouseDTO): Promise<WarehouseEntity> {
+        await this.warehouseRepo.update(id, warehouseDTO);
+        return this.getOrderById(id);
+    }
+    async getOrderById(id: number): Promise<WarehouseEntity> {
+        const idString = id.toString();
+        return this.warehouseRepo.findOneBy({ warehouseId: idString });
+    }
+    async remove(id: number): Promise<void> {
+        await this.warehouseRepo.delete(id);
     }
     getOrderByNameAndId(name, id): object {
         console.log(id, name);

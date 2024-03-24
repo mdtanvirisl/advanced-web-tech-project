@@ -27,14 +27,14 @@ export class AuthService {
             access_token: await this.jwtService.signAsync(payload),
         };
     }
-    async login(logindata: loginDTO) {
-        const seller = await this.warehouseService.search(logindata);
-        const result = await bcrypt.compare(logindata.password, seller.password);
-        if (result) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+    // async login(logindata: loginDTO) {
+    //     const staff = await this.warehouseService.search(logindata);
+    //     const result = await bcrypt.compare(logindata.password, staff.password);
+    //     if (result) {
+    //         return true;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
 }
