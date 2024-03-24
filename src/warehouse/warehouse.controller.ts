@@ -18,12 +18,65 @@ export class WarehouseController {
     getUsers(): object {
         return this.warehouseService.getUsers();
     }
-    @Get('users/:id')
+
+    @UseGuards(SessionGuard)
+    @Get('/dashboard')
+    getWarehouse(): object {
+        try {
+            return this.warehouseService.getWhStaff();
+        }
+        catch {
+            return { error: 'invalid' };
+        }
+    }
+    @UseGuards(SessionGuard)
+    @Get('/viewprofile')
+    showProfile(@Session() session): object {
+        try {
+            return this.warehouseService.showProfile(session.username);
+        }
+        catch {
+            throw new InternalServerErrorException("Failed to show profile");
+        }
+    }
+
+    @UseGuards(SessionGuard)
+    @Put('/update/:id')
+    updateUsersById(@Param('id') id: number): object {
+        return this.warehouseService.remove(id);
+    }
+
+    @UseGuards(SessionGuard)
+    @Delete('/delete/:id')
+    deleteUserbyId(@Param('id') id: number): object {
+        return this.warehouseService.remove(id);
+    }
+
+    @UseGuards(SessionGuard)
+    @Get('/notification')
+    getNotification(): string {
+        return this.warehouseService.getNotification();
+    }
+
+    @UseGuards(SessionGuard)
+    @Get('/order')
+    getOrderByNameAndId(@Query('name') name: string, @Query('id') id: string): object {
+        return this.warehouseService.getOrderByNameAndId(name, id);
+    }
+
+    @UseGuards(SessionGuard)
+    @Post('/packing')
+    addPacking(@Body() myobj: object): object {
+        console.log(myobj);
+        return this.warehouseService.addPacking(myobj);
+    }
+
+    @Get('Stock_Movement/:id')
     getUsersById(@Param('id') id: string): object {
         return this.warehouseService.getUsersById(id);
     }
 
-    @Get('users/')
+    @Get('Quality_Control/')
     getUsersByNameAndId(@Query('name') name: string,
         @Query('id') id: string): object {
         return this.warehouseService.getUsersByNameAndId(name, id);
@@ -58,61 +111,10 @@ export class WarehouseController {
     getImages(@Param('name') name: string, @Res() res) {
         res.sendFile(name, { root: './upload' })
     }
-    // @Post('addmanager/:adminid')
-    // async addManager(@Param('adminid') adminid: string, @Body() myobj: ManagerEntity,): Promise<ManagerEntity> {
 
-    //     return this.warehouseService.addManager(adminid, myobj);
-    // }
     @Get('/getstaff')
     getAllAdmin(): Promise<WarehouseEntity[]> {
         return this.warehouseService.getAllAdmins();
     }
 
-    // @UseGuards(AuthGuard)
-    // @Get('profile')
-    // getProfile(@Request() req) {
-    //     return req.user;
-    // }
-    // ###################################
-    @UseGuards(SessionGuard)
-    @Get('/dashboard')
-    getWarehouse(): object {
-        try {
-            return this.warehouseService.getWhStaff();
-        }
-        catch {
-            return { error: 'invalid' };
-        }
-    }
-    @UseGuards(SessionGuard)
-    @Get('/viewprofile')
-    showProfile(@Session() session): object {
-        try {
-            return this.warehouseService.showProfile(session.username);
-        }
-        catch {
-            throw new InternalServerErrorException("Failed to show profile");
-        }
-    }
-    @Put('/update/:id')
-    updateUsersById(@Param('id') id: number): object {
-        return this.warehouseService.remove(id);
-    }
-    @Delete('/delete/:id')
-    deleteUserbyId(@Param('id') id: number): object {
-        return this.warehouseService.remove(id);
-    }
-    @Get('/notification')
-    getNotification(): string {
-        return this.warehouseService.getNotification();
-    }
-    @Get('/order')
-    getOrderByNameAndId(@Query('name') name: string, @Query('id') id: string): object {
-        return this.warehouseService.getOrderByNameAndId(name, id);
-    }
-    @Post('/packing')
-    addPacking(@Body() myobj: object): object {
-        console.log(myobj);
-        return this.warehouseService.addPacking(myobj);
-    }
 };
