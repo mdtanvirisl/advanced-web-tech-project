@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Res, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, InternalServerErrorException, Param, Post, Put, Query, Res, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 import { WarehouseService } from "./warehouse.service";
 import { AuthGuard } from "./Auth/auth.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -74,20 +74,31 @@ export class WarehouseController {
     // }
     // ###################################
     @Get('/dashboard')
-    getWarehouse(): string {
-        return this.warehouseService.getWhStaff();
+    getWarehouse(): object {
+        try {
+            return this.warehouseService.getWhStaff();
+        }
+        catch {
+            return { error: 'invalid' };
+        }
     }
+    @UseGuards(AuthGuard)
     @Get('/viewprofile')
-    getStaff(): string {
-        return this.warehouseService.getStaff();
+    showProfile(@Session() session): object {
+        try {
+            return this.warehouseService.showProfile(session.username);
+        }
+        catch {
+            throw new InternalServerErrorException("Failed to show profile");
+        }
     }
     @Put('/update/:id')
     updateUsersById(@Param('id') id: number): object {
-        return this.warehouseService.getUserById(id);
+        return this.warehouseService.remove(id);
     }
     @Delete('/delete/:id')
     deleteUserbyId(@Param('id') id: number): object {
-        return this.warehouseService.getUserById(id);
+        return this.warehouseService.remove(id);
     }
     @Get('/notification')
     getNotification(): string {

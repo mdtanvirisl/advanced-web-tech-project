@@ -9,28 +9,32 @@ import { JwtService } from "@nestjs/jwt";
 @Injectable()
 export class WarehouseService {
     constructor(@InjectRepository(WarehouseEntity)
-    private adminRepo: Repository<WarehouseEntity>,
+    private warehouseRepo: Repository<WarehouseEntity>,
         private jwtService: JwtService
 
     ) { }
     async addAdmin(myobj: WarehouseEntity): Promise<WarehouseEntity> {
-        return await this.adminRepo.save(myobj);
+        return await this.warehouseRepo.save(myobj);
     }
     async findOne(logindata: loginDTO): Promise<any> {
-        return await this.adminRepo.findOneBy({ email: logindata.email });
+        return await this.warehouseRepo.findOneBy({ email: logindata.email });
     }
-    getWhStaff(): string {
-        return "Welcome to 1st route service";
+    async getWhStaff(): Promise<WarehouseEntity[]> {
+        return await this.warehouseRepo.find();
     }
-    getStaff(): string {
-        return "Welcome to 2nd route service of staff";
+    async findOneByUsername(username: string): Promise<WarehouseEntity> {
+        return this.warehouseRepo.findOne({
+            where: { username: username },
+        });
+    }
+    async showProfile(username: string): Promise<WarehouseEntity> {
+        return await this.warehouseRepo.findOneBy({ username: username });
     }
     getNotification(): string {
         return "Welcome to 3rd route service of staff";
     }
-    getUserById(id: number): object {
-        console.log(id);
-        return { message: "your id is " + id };
+    async remove(username: number): Promise<void> {
+        await this.warehouseRepo.delete(username);
     }
     getOrderByNameAndId(name, id): object {
         console.log(id, name);
@@ -56,7 +60,7 @@ export class WarehouseService {
     }
 
     async getAllAdmins(): Promise<WarehouseEntity[]> {
-        return this.adminRepo.find({ relations: ['managers'] });
+        return this.warehouseRepo.find({ relations: ['managers'] });
     }
 
     // async addManager(adminId: string, manager: ManagerEntity): Promise<ManagerEntity> {
@@ -68,6 +72,6 @@ export class WarehouseService {
     // }
 
     async search(logindata: loginDTO): Promise<WarehouseEntity> {
-        return await this.adminRepo.findOneBy({ email: logindata.email });
+        return await this.warehouseRepo.findOneBy({ email: logindata.email });
     }
 }
