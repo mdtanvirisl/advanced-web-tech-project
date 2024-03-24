@@ -43,25 +43,44 @@ export class WarehouseController {
     @UseGuards(SessionGuard)
     @Put('/update/:id')
     updateUsersById(@Param('id') id: number): object {
-        return this.warehouseService.remove(id);
+        try {
+            return this.warehouseService.remove(id);
+        } catch {
+            throw new InternalServerErrorException("Failed to update profile");
+        }
     }
 
     @UseGuards(SessionGuard)
     @Delete('/delete/:id')
     deleteUserbyId(@Param('id') id: number): object {
-        return this.warehouseService.remove(id);
+        try {
+            return this.warehouseService.remove(id);
+
+        } catch {
+            throw new InternalServerErrorException("Failed to delete profile");
+        }
     }
 
     @UseGuards(SessionGuard)
-    @Get('/notification')
+    @Get('/notice')
     getNotification(): string {
-        return this.warehouseService.getNotification();
+        try {
+            return this.warehouseService.getNotification();
+
+        } catch {
+            throw new InternalServerErrorException("Failed to show notice");
+        }
     }
 
     @UseGuards(SessionGuard)
     @Get('/order')
     getOrderByNameAndId(@Query('name') name: string, @Query('id') id: string): object {
-        return this.warehouseService.getOrderByNameAndId(name, id);
+        try {
+            return this.warehouseService.getOrderByNameAndId(name, id);
+
+        } catch {
+            throw new InternalServerErrorException("Failed to show order");
+        }
     }
 
     @UseGuards(SessionGuard)
