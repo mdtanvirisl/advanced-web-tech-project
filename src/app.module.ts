@@ -8,7 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './warehouse/Auth/auth.module';
 
 @Module({
-  imports: [AdminModule, WarehouseModule, User2Module, TypeOrmModule.forRoot(
+  imports: [WarehouseModule, TypeOrmModule.forRoot(
     {
       type: 'postgres',
       host: 'localhost',

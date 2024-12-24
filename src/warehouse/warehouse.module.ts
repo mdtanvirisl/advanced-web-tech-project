@@ -6,10 +6,11 @@ import { JwtModule } from "@nestjs/jwt";
 import { WarehouseEntity } from "./warehouse.entity";
 import { AuthService } from "./Auth/auth.service";
 import { noticeEntity } from "./notice.entity";
+import { ProductEntity } from "./product.entity";
 
 
 @Module({
-    imports: [TypeOrmModule.forFeature([WarehouseEntity, noticeEntity]),
+    imports: [TypeOrmModule.forFeature([WarehouseEntity, noticeEntity, ProductEntity]),
     JwtModule.register({
         global: true,
         secret: "3NP_Backend_Warehouse",

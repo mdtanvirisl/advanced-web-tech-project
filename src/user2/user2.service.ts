@@ -29,9 +29,6 @@ export class User2Service {
         await this.userRepository.delete(username);
     }
 
-
-
-
     async addUser(myObj: user2DTO): Promise<user2DTO> {
         return myObj;
     }

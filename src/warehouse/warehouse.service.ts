@@ -1,13 +1,18 @@
 import { Injectable, ParseIntPipe } from "@nestjs/common";
 import { WarehouseEntity } from "./warehouse.entity";
-import { WarehouseDTO, loginDTO } from "./warehouse.dto";
+import { UpdateStaffDTO, WarehouseDTO, loginDTO } from "./warehouse.dto";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
+import { ProductEntity } from "./product.entity";
+import { UpdateDTO } from "./product.dto";
 
 
 @Injectable()
 export class WarehouseService {
+    @InjectRepository(ProductEntity)
+    private productRepo: Repository<ProductEntity>
+
     constructor(@InjectRepository(WarehouseEntity)
     private warehouseRepo: Repository<WarehouseEntity>,
         private jwtService: JwtService
@@ -29,6 +34,48 @@ export class WarehouseService {
     }
     async showProfile(username: string): Promise<WarehouseEntity> {
         return await this.warehouseRepo.findOneBy({ username: username });
+    }
+
+
+    async updateProfile(username: string, UpdateInfo: UpdateStaffDTO): Promise<any> {
+        await this.warehouseRepo.update({ username: username }, UpdateInfo);
+        return await this.warehouseRepo.findOneBy({ username: username });
+    }
+
+    async addProduct(myobj: ProductEntity): Promise<ProductEntity> {
+        return await this.productRepo.save(myobj);
+    }
+
+    async updateProduct(id: number, UpdateProduct: UpdateDTO): Promise<ProductEntity> {
+        await this.productRepo.update(id, UpdateProduct);
+        return await this.productRepo.findOneBy({ productId: id });
+    }
+
+    async showAllProduct(): Promise<ProductEntity[]> {
+        return await this.productRepo.find();
+    }
+
+    async searchProduct(name: string): Promise<ProductEntity[]> {
+        return await this.productRepo.find({
+            where: {
+                productName: Like(name + '%')
+
+            },
+        });
+    }
+    async searchCustomer(name: string): Promise<WarehouseEntity[]> {
+        return await this.warehouseRepo.find({
+            where: {
+                name: Like(name + '%')
+            },
+        });
+    }
+    async getUsersByEmail(email: string): Promise<WarehouseEntity> {
+        return await this.warehouseRepo.findOne({
+            where: {
+                email: email,
+            }
+        });
     }
     getNotification(): string {
         return "Welcome to 3rd route service of staff";

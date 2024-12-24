@@ -34,14 +34,45 @@ export class WarehouseDTO {
     @Optional()
     filename: string;
 
-    @Optional()
-    notices: any;
-
     // @Optional()
+    // notices: any;
+
+    // @Optional() 
     // address: any;
 }
 
 export class loginDTO {
-    @IsEmail() email: string;
-    @IsNotEmpty() password: string;
+    @IsEmail()
+    email: string;
+    @IsNotEmpty()
+    password: string;
+}
+
+export class UpdateStaffDTO {
+
+    @Optional()
+    //@IsNotEmpty({ message: 'Please enter a valid name' })
+    /*@IsString()
+    @Matches(/^[A-Za-z]+$/, { message: 'Name field should contain only alphabetic character' })*/
+    name: string;
+
+    @Optional()
+    //@IsNotEmpty({ message: 'Please enter a valid email address' })
+    /*@IsEmail({}, { message: 'Invalid email format' })
+    @MaxLength(30, { message: 'Email Address field must be at most 30 characters long' })
+    @MinLength(10, { message: 'Email Address field must be at least 20 characters long' })
+    @Matches(/.*@.*\.com$/, { message: 'Email must contain @, ., com' })*/
+    email: string;
+
+    @IsNotEmpty({ message: 'enter your address' })
+    @IsString()
+    address: string;
+
+}
+
+export class UpdateProfilePicDto {
+
+    @Optional()
+    filename: string;
+
 }

@@ -1,11 +1,12 @@
-import { Body, Controller, Delete, Get, InternalServerErrorException, Param, Post, Put, Query, Res, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, InternalServerErrorException, Param, ParseIntPipe, Post, Put, Query, Res, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 import { WarehouseService } from "./warehouse.service";
 import { AuthGuard } from "./Auth/auth.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { MulterError, diskStorage } from "multer";
-import { WarehouseDTO } from "./warehouse.dto";
+import { UpdateStaffDTO, WarehouseDTO } from "./warehouse.dto";
 import { WarehouseEntity } from "./warehouse.entity";
 import { SessionGuard } from "./session.guard";
+import { ProductDTO, UpdateDTO } from "./product.dto";
 
 
 @Controller('warehouse')
@@ -19,7 +20,7 @@ export class WarehouseController {
         return this.warehouseService.getUsers();
     }
 
-    @UseGuards(SessionGuard)
+    // @UseGuards(SessionGuard)
     @Get('/dashboard')
     getWarehouse(): object {
         try {
@@ -38,6 +39,22 @@ export class WarehouseController {
         catch {
             throw new InternalServerErrorException("Failed to show profile");
         }
+    }
+
+    @Put('/update_profile/:username')
+    updateProfile(@Param('username') username: string, @Body() UpdateInfo: UpdateStaffDTO): object {
+        try {
+            return this.warehouseService.updateProfile(username, UpdateInfo);
+        }
+        catch {
+            throw new InternalServerErrorException("Failed to update profile");
+        }
+
+    }
+
+    @Get('getusers/:email')
+    getUsersByEmail(@Param('email') email: string): object {
+        return this.warehouseService.getUsersByEmail(email);
     }
 
     @UseGuards(SessionGuard)
@@ -60,6 +77,16 @@ export class WarehouseController {
             throw new InternalServerErrorException("Failed to delete profile");
         }
     }
+    @Get('/search_staff')
+    searchCustomer(@Query() query: { name: string }): object {
+        const { name } = query;
+        try {
+            return this.warehouseService.searchCustomer(name);
+        }
+        catch {
+            throw new InternalServerErrorException("Failed to search");
+        }
+    }
 
     @UseGuards(SessionGuard)
     @Get('/notice')
@@ -71,34 +98,88 @@ export class WarehouseController {
             throw new InternalServerErrorException("Failed to show notice");
         }
     }
-
-    @UseGuards(SessionGuard)
-    @Get('/order')
-    getOrderByNameAndId(@Query('name') name: string, @Query('id') id: string): object {
+    @Post('addproduct')
+    @UseInterceptors(FileInterceptor('productPic',
+        {
+            fileFilter: (req, file, cb) => {
+                if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/))
+                    cb(null, true);
+                else {
+                    cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+                }
+            },
+            limits: { fileSize: 30000 },
+            storage: diskStorage({
+                destination: './upload',
+                filename: function (req, file, cb) {
+                    cb(null, Date.now() + file.originalname)
+                },
+            })
+        }
+    ))
+    @UsePipes(new ValidationPipe)
+    addProduct(@Body() myobj: ProductDTO, @UploadedFile() myfile: Express.Multer.File): object {
+        myobj.filename = myfile.filename;
         try {
-            return this.warehouseService.getOrderByNameAndId(name, id);
-
-        } catch {
-            throw new InternalServerErrorException("Failed to show order");
+            return this.warehouseService.addProduct(myobj);
+        }
+        catch {
+            throw new InternalServerErrorException("Failed to add product");
         }
     }
 
     @UseGuards(SessionGuard)
-    @Post('/packing')
-    addPacking(@Body() myobj: object): object {
-        console.log(myobj);
-        return this.warehouseService.addPacking(myobj);
+    @Put('/update_product/:id')
+    @UseInterceptors(FileInterceptor('productPic',
+        {
+            fileFilter: (req, file, cb) => {
+                if (file.originalname.match(/^.*\.(jpg|webp|png|jpeg)$/))
+                    cb(null, true);
+                else {
+                    cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+                }
+            },
+            limits: { fileSize: 30000 },
+            storage: diskStorage({
+                destination: './upload',
+                filename: function (req, file, cb) {
+                    cb(null, Date.now() + file.originalname)
+                },
+            })
+        }
+    ))
+    @UsePipes(new ValidationPipe)
+    updateProduct(@Param('id', ParseIntPipe) id: number, @Body() UpdateProduct: UpdateDTO, @UploadedFile() myfile: Express.Multer.File): object {
+        UpdateProduct.filename = myfile.filename;
+        try {
+            return this.warehouseService.updateProduct(id, UpdateProduct);
+        }
+        catch {
+            throw new InternalServerErrorException("Failed to update product");
+        }
     }
 
-    @Get('Stock_Movement/:id')
-    getUsersById(@Param('id') id: string): object {
-        return this.warehouseService.getUsersById(id);
+    // @UseGuards(SessionGuard)
+    @Get('/show_all_product')
+    showAllProduct(): object {
+        try {
+            return this.warehouseService.showAllProduct();
+        }
+        catch {
+            throw new InternalServerErrorException("Failed to show all product");
+        }
     }
 
-    @Get('Quality_Control/')
-    getUsersByNameAndId(@Query('name') name: string,
-        @Query('id') id: string): object {
-        return this.warehouseService.getUsersByNameAndId(name, id);
+    // @UseGuards(SessionGuard)
+    @Get('/search_product_name')
+    searchProduct(@Query() query: { name: string }): object {
+        const { name } = query;
+        try {
+            return this.warehouseService.searchProduct(name);
+        }
+        catch {
+            throw new InternalServerErrorException("Failed to search");
+        }
     }
 
     @Post('addstaff')

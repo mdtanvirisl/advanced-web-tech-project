@@ -18,7 +18,7 @@ export class AuthController {
                     cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
                 }
             },
-            limits: { fileSize: 30000 },
+            limits: { fileSize: 600000 },
             storage: diskStorage({
                 destination: './upload',
                 filename: function (req, file, cb) {
